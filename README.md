@@ -5,22 +5,19 @@ Learning/improving PHP
 
 ### Steps to reach Goal
 1. Start - php form
-2. Continue - event loop - simple snake game
-3. Finished? - combine php and js for a better game
+2. Add a framework and JS - combine php and js for a better user experience
 <br>
 
 ### Tools needed
 - Vscode
-- php
-- docker
-- mysql
+- Php
+- Mysql
 
 <br>
 
 ### Contents
-- [](info.php)
-- [](index.html)
-- []()
+- [See a form live](index.php)
+- [The starting of it](db.php)
 
 <br>
 
@@ -29,3 +26,4 @@ Learning/improving PHP
  | Tool  | About  |
  | ----- | ------ |
  |  php| server side code  |
+ |  mysql| server side code  |
