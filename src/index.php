@@ -16,8 +16,6 @@
             width: 120px;
         }
     </style>
-    <script>
-    </script>
 </head>
 
 <body>
@@ -56,7 +54,6 @@
                             }
                             echo "</tbody>";
                             echo "</table>";
-                            // Free result set
                             mysqli_free_result($result);
                         } else {
                             echo '<div class="alert"><em>No records found.</em></div>';
@@ -65,7 +62,6 @@
                         echo "Oops! Something wrong.";
                     }
 
-                    // Close connection
                     mysqli_close($link);
                     ?>
                 </div>

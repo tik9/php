@@ -1,10 +1,10 @@
 CREATE TABLE todo (
-    i_id INT AUTO_INCREMENT,
+    id INT(3) AUTO_INCREMENT,
     title VARCHAR(255),
     content VARCHAR(255),
-    PRIMARY KEY(i_id)
+    PRIMARY KEY(id)
 );
 
-INSERT INTO todo (title,content) VALUES ("My first important item", 'hooray'), ("2nd todo", 'we need some more eating stuff');
+INSERT INTO todo (title,content) VALUES ("My first important item", 'hooray'), ("second todo", 'we need some more eating stuff');
 
 
