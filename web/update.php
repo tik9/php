@@ -72,7 +72,8 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
     }
     mysqli_stmt_close($stmt);
     mysqli_close($link);
-
+} else if ($_GET['newentry']) {
+  
 } else if ($_GET['newentry_save']) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -86,6 +87,7 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
 
                 $param_title = $title;
                 $param_content = $content;
+                var_dump($content, $title);
 
                 if (mysqli_stmt_execute($stmt)) {
                     header("location: index.php");
