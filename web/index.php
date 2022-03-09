@@ -69,6 +69,9 @@
                     ?>
                 </div>
             </div>
+            <div style="margin-bottom: 50px;"></div>
+
+            <?php include 'footer.php';?>
         </div>
     </div>
 </body>

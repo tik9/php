@@ -16,22 +16,25 @@ function check()
     }
 }
 
+function do_it($sql, $link)
+{
 
-if (isset($_POST["id"]) && !empty($_POST["id"])) {
     $id = $_POST["id"];
 
     list($title, $content) = check();
 
     $err_array = array('error', 'error2');
     if (!in_array($title, $err_array) && !in_array($content, $err_array)) {
-        $sql = "UPDATE todo SET title=?, content=? WHERE id=?";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
-            mysqli_stmt_bind_param($stmt, "ssi", $param_title, $param_content, $param_id);
-
+            if ($id) {
+                mysqli_stmt_bind_param($stmt, "ssi", $param_title, $param_content, $param_id);
+                $param_id = $id;
+            } else {
+                mysqli_stmt_bind_param($stmt, "ss", $param_title, $param_content);
+            }
             $param_title = $title;
             $param_content = $content;
-            $param_id = $id;
 
             if (mysqli_stmt_execute($stmt)) {
                 header("location: index.php");
@@ -45,6 +48,12 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
     }
 
     mysqli_close($link);
+}
+
+if (isset($_POST["id"]) && !empty($_POST["id"])) {
+    $sql = "UPDATE todo SET title=?, content=? WHERE id=?";
+
+    do_it($sql, $link);
 } else if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
     $id =  trim($_GET["id"]);
 
@@ -73,33 +82,10 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
     mysqli_stmt_close($stmt);
     mysqli_close($link);
 } else if ($_GET['newentry']) {
-  
 } else if ($_GET['newentry_save']) {
+    $sql = "INSERT INTO todo (title, content) VALUES (?, ?)";
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-        list($title, $content) = check();
-
-        if (!in_array($title, array('error', 'error2')) && $content != 'error') {
-            $sql = "INSERT INTO todo (title, content) VALUES (?, ?)";
-
-            if ($stmt = mysqli_prepare($link, $sql)) {
-                mysqli_stmt_bind_param($stmt, "ss", $param_title, $param_content);
-
-                $param_title = $title;
-                $param_content = $content;
-                var_dump($content, $title);
-
-                if (mysqli_stmt_execute($stmt)) {
-                    header("location: index.php");
-                    exit();
-                } else {
-                    echo "Oops! Something wrong.";
-                }
-            }
-
-            mysqli_stmt_close($stmt);
-        }
-        mysqli_close($link);
+        do_it($sql, $link);
     }
 } else {
     header("location: error.php");
@@ -158,6 +144,8 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
                     </form>
                 </div>
             </div>
+            <div style="margin-bottom: 50px;"></div>
+            <?php include 'footer.php'; ?>
         </div>
     </div>
 </body>
