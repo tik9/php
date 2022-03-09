@@ -26,14 +26,17 @@
                     <div class="mt-5 mb-3 clearfix">
                         <h2 class="pull-left">Timo Körner - To dos</h2>
                     </div>
-                    <?php
+<span style="margin-left: 500px;"></span>
+<a href='update.php?newentry=true' class='btn btn-primary'>new Entry</a>
+
+<?php
                     require_once "config.php";
 
                     // Attempt select query execution
                     $sql = "SELECT id,title,content FROM todo";
                     if ($result = mysqli_query($link, $sql)) {
                         if (mysqli_num_rows($result) > 0) {
-                            echo '<table class="table table-bordered table-striped">';
+                            echo '<div style="margin-bottom: 50px;"></div><table class="table table-bordered table-striped">';
                             echo "<thead>";
                             echo "<tr>";
                             echo "<th>#</th>";
