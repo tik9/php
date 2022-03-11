@@ -2,61 +2,52 @@
 
 require_once "config.php";
 
-function check()
+function do_it($sql, $link)
 {
+    $error = [];
+    $id = $_POST["id"];
+
     $input_title = trim($_POST["title"]);
     $input_content = trim($_POST["content"]);
 
-    if (empty($input_title) || empty($input_content)) {
-        return "error";
+    if (empty($input_title)) {
+        $error['title'] = 'The title is empty';
+    } elseif (empty($input_content)) {
+        $error['content'] = 'The content is empty';
     } elseif (!filter_var($input_title, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^[a-zA-Z\s]+$/")))) {
-        return "error2";
-    } else {
-        return  array($input_title, $input_content);
+        $error['title'] = 'The title contains invalid characters';
     }
-}
+    if ($error) return $error;
 
-function do_it($sql, $link)
-{
-
-    $id = $_POST["id"];
-
-    list($title, $content) = check();
-
-    $err_array = array('error', 'error2');
-    if (!in_array($title, $err_array) && !in_array($content, $err_array)) {
-
-        if ($stmt = mysqli_prepare($link, $sql)) {
-            if ($id) {
-                mysqli_stmt_bind_param($stmt, "ssi", $param_title, $param_content, $param_id);
-                $param_id = $id;
-            } else {
-                mysqli_stmt_bind_param($stmt, "ss", $param_title, $param_content);
-            }
-            $param_title = $title;
-            $param_content = $content;
-
-            if (mysqli_stmt_execute($stmt)) {
-                header("location: index.php");
-                exit();
-            } else {
-                echo "Oops! Something wrong.";
-            }
+    if ($stmt = mysqli_prepare($link, $sql)) {
+        if ($id) {
+            mysqli_stmt_bind_param($stmt, "ssi", $param_title, $param_content, $param_id);
+            $param_id = $id;
+        } else {
+            mysqli_stmt_bind_param($stmt, "ss", $param_title, $param_content);
         }
+        $param_title = $input_title;
+        $param_content = $input_content;
 
-        mysqli_stmt_close($stmt);
+        if (mysqli_stmt_execute($stmt)) {
+            header("location: index.php");
+            exit();
+        } else {
+            echo "Oops! Something wrong.";
+        }
     }
 
+    mysqli_stmt_close($stmt);
     mysqli_close($link);
+    return(array($input_title,$input_content));
 }
 
 if (isset($_POST["id"]) && !empty($_POST["id"])) {
     $sql = "UPDATE todo SET title=?, content=? WHERE id=?";
 
-    do_it($sql, $link);
+    list($title,$content) = do_it($sql, $link);
 } else if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
-    $id =  trim($_GET["id"]);
-
+    $id = trim($_GET["id"]);
     $sql = "SELECT * FROM todo WHERE id = ?";
     if ($stmt = mysqli_prepare($link, $sql)) {
         mysqli_stmt_bind_param($stmt, "i", $param_id);
@@ -85,7 +76,7 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
 } else if ($_GET['newentry_save']) {
     $sql = "INSERT INTO todo (title, content) VALUES (?, ?)";
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        do_it($sql, $link);
+        list($title,$content) = do_it($sql, $link);
     }
 } else {
     header("location: error.php");
@@ -128,15 +119,16 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
                                     ?>" method="post">
                         <div class="form-group">
                             <label>Title</label>
-                            <input type="text" name="title" class="form-control <?php echo (!empty($title_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $title; ?>">
-                            <span class="invalid-feedback"><?php echo $title_err; ?></span>
+                            <input type="text" name="title" class="form-control <?php echo (!empty($error['title'])) ? 'is-invalid' : ''; ?>" value="<?php echo $title; ?>">
+                            <span class="invalid-feedback"><?php echo $error['title']; ?></span>
                         </div>
                         <div class="form-group">
                             <label>Content</label>
-                            <textarea name="content" class="form-control <?php echo (!empty($content_err)) ? 'is-invalid' : ''; ?>"><?php echo $content; ?></textarea>
-                            <span class="invalid-feedback"><?php echo $content_err; ?></span>
+                            <textarea name="content" class="form-control <?php echo (!empty($error['content'])) ? 'is-invalid' : ''; ?>"><?php echo $content; ?></textarea>
+                            <span class="invalid-feedback"><?php echo $error['content']; ?></span>
                         </div>
                         <?php
+                        var_dump($error);
                         if ($id) echo '<input type="hidden" name="id" value=' . $id . ' />';
                         ?>
                         <input type="submit" class="btn btn-primary" value="Submit">
