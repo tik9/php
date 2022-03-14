@@ -17,7 +17,7 @@ function do_it($sql, $link)
     } elseif (!filter_var($input_title, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^[a-zA-Z\s]+$/")))) {
         $error['title'] = 'The title contains invalid characters';
     }
-    if ($error) return $error;
+    if ($error) return array($input_title, $input_content, $error);
 
     if ($stmt = mysqli_prepare($link, $sql)) {
         if ($id) {
@@ -39,13 +39,12 @@ function do_it($sql, $link)
 
     mysqli_stmt_close($stmt);
     mysqli_close($link);
-    return(array($input_title,$input_content));
+    return (array($input_title, $input_content));
 }
 
 if (isset($_POST["id"]) && !empty($_POST["id"])) {
     $sql = "UPDATE todo SET title=?, content=? WHERE id=?";
-
-    list($title,$content) = do_it($sql, $link);
+    list($title, $content, $error) = do_it($sql, $link);
 } else if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
     $id = trim($_GET["id"]);
     $sql = "SELECT * FROM todo WHERE id = ?";
@@ -76,7 +75,7 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
 } else if ($_GET['newentry_save']) {
     $sql = "INSERT INTO todo (title, content) VALUES (?, ?)";
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        list($title,$content) = do_it($sql, $link);
+        list($title, $content, $error) = do_it($sql, $link);
     }
 } else {
     header("location: error.php");
@@ -128,7 +127,6 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
                             <span class="invalid-feedback"><?php echo $error['content']; ?></span>
                         </div>
                         <?php
-                        var_dump($error);
                         if ($id) echo '<input type="hidden" name="id" value=' . $id . ' />';
                         ?>
                         <input type="submit" class="btn btn-primary" value="Submit">
