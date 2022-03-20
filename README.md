@@ -9,15 +9,15 @@ Learning/improving PHP
 <br>
 
 ### Tools needed
-- Vscode
 - Php
 - Mysql
+- Composer
 
 <br>
 
 ### Contents
 - [See a form live](index.php)
-- [The starting of it](db.php)
+- [The starting of it](db_test.php)
 
 <br>
 
@@ -25,5 +25,11 @@ Learning/improving PHP
 
  | Tool  | About  |
  | ----- | ------ |
- |  php| server side code  |
- |  mysql| server side code  |
+ |  php| use composer |
+
+ ### Todo
+
+ Page|todo
+ -|-
+ all|include mongodb
+ header|bootstrap 5 shorts like md, mt

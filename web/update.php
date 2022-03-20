@@ -1,6 +1,6 @@
 <?php
 
-require_once "config.php";
+include "config.php";
 
 function do_it($sql, $link)
 {
@@ -81,63 +81,40 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
     header("location: error.php");
     exit();
 }
-?>
+include 'header.php';
+echo '<h3 id=h_intro>';
+if ($_GET['newentry'] || $_GET['newentry_save']) {
+    echo 'Create';
+} else
+    echo 'Update';
+?> Todo</h3>
+<div id=intro>The page should give an example how I create a form which is editable and has error form entry checking - filtering unwanted chars and no or blank entries</div>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Timo Körner</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .wrapper {
-            width: 600px;
-            margin: 0 auto;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="mt-5">Timo Körner -
-                        <?php
-                        if ($_GET['newentry'] || $_GET['newentry_save']) {
-                            echo 'Create';
-                        } else
-                            echo 'Update';
-                        ?> Todo</h2>
-                    <p>Please submit to create/update the record.</p>
-                    <form action="<?php
-                                    if ($id) {
-                                        echo htmlspecialchars(basename($_SERVER['REQUEST_URI']));
-                                    } else echo 'update.php?newentry_save=true';
-                                    ?>" method="post">
-                        <div class="form-group">
-                            <label>Title</label>
-                            <input type="text" name="title" class="form-control <?php echo (!empty($error['title'])) ? 'is-invalid' : ''; ?>" value="<?php echo $title; ?>">
-                            <span class="invalid-feedback"><?php echo $error['title']; ?></span>
-                        </div>
-                        <div class="form-group">
-                            <label>Content</label>
-                            <textarea name="content" class="form-control <?php echo (!empty($error['content'])) ? 'is-invalid' : ''; ?>"><?php echo $content; ?></textarea>
-                            <span class="invalid-feedback"><?php echo $error['content']; ?></span>
-                        </div>
-                        <?php
-                        if ($id) echo '<input type="hidden" name="id" value=' . $id . ' />';
-                        ?>
-                        <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>
-                    </form>
-                </div>
-            </div>
-            <div style="margin-bottom: 50px;"></div>
-            <?php include 'footer.php'; ?>
-        </div>
+<div>Please submit to create/update the record.</div>
+<form action="<?php
+                if ($id) {
+                    echo htmlspecialchars(basename($_SERVER['REQUEST_URI']));
+                } else echo 'update.php?newentry_save=true';
+                ?>" method="post">
+    <div class="form-group">
+        <label>Title</label>
+        <input type="text" name="title" class="form-control <?php echo (!empty($error['title'])) ? 'is-invalid' : ''; ?>" value="<?php echo $title; ?>">
+        <span class="invalid-feedback"><?php echo $error['title']; ?></span>
     </div>
-</body>
+    <div class="form-group">
+        <label>Content</label>
+        <textarea name="content" class="form-control <?php echo (!empty($error['content'])) ? 'is-invalid' : ''; ?>"><?php echo $content; ?></textarea>
+        <span class="invalid-feedback"><?php echo $error['content']; ?></span>
+    </div>
+    <?php
+    if ($id) echo '<input type="hidden" name="id" value=' . $id . ' />';
+    ?>
+    <input type="submit" class="btn btn-primary" value="Submit">
+    <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>
+</form>
 
-</html>
+</div>
+</div>
+<?php include 'footer.php'; ?>
+</div>
+</div>
