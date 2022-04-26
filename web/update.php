@@ -83,7 +83,7 @@ if (isset($_POST["id"]) && !empty($_POST["id"])) {
 }
 include 'header.php';
 echo '<h3 id=h_intro>';
-if ($_GET['newentry'] || $_GET['newentry_save']) {
+if (!empty($_GET['newentry']) || !empty($_GET['newentry_save'])) {
     echo 'Create';
 } else
     echo 'Update';
@@ -98,16 +98,16 @@ if ($_GET['newentry'] || $_GET['newentry_save']) {
                 ?>" method="post">
     <div class="form-group">
         <label>Title</label>
-        <input type="text" name="title" class="form-control <?php echo (!empty($error['title'])) ? 'is-invalid' : ''; ?>" value="<?php echo $title; ?>">
+        <input type="text" name="title" class="form-control <?php echo (!empty($error['title'])) ? 'is-invalid' : ''; ?>" value="<?php if (!empty($title)) echo $title; ?>">
         <span class="invalid-feedback"><?php echo $error['title']; ?></span>
     </div>
     <div class="form-group">
         <label>Content</label>
-        <textarea name="content" class="form-control <?php echo (!empty($error['content'])) ? 'is-invalid' : ''; ?>"><?php echo $content; ?></textarea>
+        <textarea name="content" class="form-control <?php echo (!empty($error['content'])) ? 'is-invalid' : ''; ?>"><?php if (!empty($content)) echo $content; ?></textarea>
         <span class="invalid-feedback"><?php echo $error['content']; ?></span>
     </div>
     <?php
-    if ($id) echo '<input type="hidden" name="id" value=' . $id . ' />';
+    if (!empty($id)) echo '<input type="hidden" name="id" value=' . $id . ' />';
     ?>
     <input type="submit" class="btn btn-primary" value="Submit">
     <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>

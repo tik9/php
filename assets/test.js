@@ -16,11 +16,14 @@ function tableCreate() {
     testdiv.appendChild(tbl);
 }
 
-tableCreate();
+// tableCreate();
 
-setTimeout(() => {
-    console.log(3)
+function fetch_test() {
+    // var url = 'http://192.168.178.23:3000/showdir/gpx'
+    var url = 'server.php'
+    fetch(url).then(res => res.json()).then(data => console.log(1, data))
+}
 
-}, 500);
+fetch_test()
 
 console.log(2)

@@ -1,3 +1,5 @@
+<?php $docroot = $_SERVER['DOCUMENT_ROOT'].'/web';?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

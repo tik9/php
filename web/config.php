@@ -9,10 +9,10 @@ $hostname = getenv('HTTP_HOST');
 $hostname_port = $_SERVER['HTTP_HOST'];
 $hostname = explode(':', $hostname_port);
 
-$db_hostname = 'localhost';
-$db = $_ENV['db'];
-$password = $_ENV['password'];
-$user = $_ENV['user'];
+// $db_hostname = 'localhost';
+// $db = $_ENV['db'];
+// $password = $_ENV['password'];
+// $user = $_ENV['user'];
 
 $db_hostname = $_ENV['host_heroku'];
 $db = $_ENV['db_heroku'];
