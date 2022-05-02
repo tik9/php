@@ -1,16 +1,14 @@
 server_local=localhost
 server_network=192.168.178.45
-port=4000
 port=3000
+port=80
 
 function fetch_node {
     curl -s $server_network:$port/dir/gpx
 }
 
 function fetch_local {
-    serport=$server_local:$port
-    # printf $serport
-    curl -s $serport/public/server.php
+    curl -s $server_local:$port/public/server2.php
 }
 
 function test_list {
@@ -27,4 +25,5 @@ function test_update {
 
 # fetch_local
 
-fetch_node
+# fetch_node
+test_list
